@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using CCMarketoBL.Model;
 using System.Web;
+using CCMarketoBL.CCMTManager;
 
 namespace CCMarketoBL
 {
@@ -17,20 +18,23 @@ namespace CCMarketoBL
         {
             IdentityModel identity = new IdentityModel();
             IdentityManager token = new IdentityManager();
-            ServiceManager serv = new ServiceManager();
-            var qs = HttpUtility.ParseQueryString(string.Empty);
+          //  ServiceManager serv = new ServiceManager();
+            
             // var identityResponse= token.getIdentityByID(enterpriseID);
             identity.ClientID = "1e4603f3-ee9e-476c-a3f9-59c5b9c4837b";
             identity.ClientSecret = "Udmc9mUFHe1J3qUsw59qdzC58H2a6Lnh";
+
+            var qs = HttpUtility.ParseQueryString(string.Empty);
             qs.Add("access_token",token.getToken(identity)["access_token"]);            
-            String url = ConfigurationManager.AppSettings["MTBaseURL"] + "/rest/asset/v1/folders.json?" + qs.ToString();
-            //HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);          
-            //request.Accept = "application/json";
-            //HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            //Stream resStream = response.GetResponseStream();
-            //StreamReader reader = new StreamReader(resStream);
-           var servResponse= serv.MT_GetServResponse(url);
-            return servResponse;
+           
+            var resourceUrl = "/rest/asset/v1/folders.json?" + qs.ToString(); ;
+            string url = CCMTHelper.GetFullUrl(resourceUrl);
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);           
+            StreamReader reader = ServiceManager.GET_APICall(url, request);
+            return reader.ReadToEnd();
+           // var servResponse= serv.MT_GetServResponse(url);
+           // return servResponse;
         }               
     }
 }

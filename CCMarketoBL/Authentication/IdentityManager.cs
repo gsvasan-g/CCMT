@@ -6,6 +6,7 @@ using System.IO;
 using System.Net;
 using CCMarketoBL.Model;
 using System.Threading.Tasks;
+using CCMarketoBL.CCMTManager;
 
 namespace CCMarketoBL
 {
@@ -22,28 +23,30 @@ namespace CCMarketoBL
             identityModel = new IdentityModel();
             identityModel.ClientID = clientId;
             identityModel.ClientSecret = clientSecret;
-            String url = host + "/identity/oauth/token?grant_type=client_credentials&client_id=" + identityModel.ClientID + "&client_secret=" + identityModel.ClientSecret;
-            //HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            //request.ContentType = "application/json";
-            //var res = request.GetResponse();
-            //HttpWebResponse response = (HttpWebResponse)res;
-            //Stream resStream = response.GetResponseStream();
-            //StreamReader reader = new StreamReader(resStream);
-            //String json = reader.ReadToEnd();
 
-            ServiceManager serv = new ServiceManager();
-          var json=  serv.MT_GetServResponse(url);
+            var resourceUrl = "/identity/oauth/token?grant_type=client_credentials&client_id=" + identityModel.ClientID + "&client_secret=" + identityModel.ClientSecret;
+            string url = CCMTHelper.GetFullUrl(resourceUrl);
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.ContentType = "application/json";
+
+            StreamReader reader = ServiceManager.GET_APICall(url, request);
+
+            String json = reader.ReadToEnd();
+
+            //  ServiceManager serv = new ServiceManager();
+            //var json=  serv.MT_GetServResponse(url);
             Dictionary<String, String> dict = JsonConvert.DeserializeObject<Dictionary<String, String>>(json);
             return dict;
         }
         public Dictionary<String, String> createIdentity(IdentityModel identityModel)
         {
-             var apiResponse = getToken(identityModel);
+            var apiResponse = getToken(identityModel);
             if (apiResponse.ContainsKey("access_token"))
             {
-                Task.Run(() => saveCredentials(identityModel));                              
+                Task.Run(() => saveCredentials(identityModel));
             }
-           
+
             return apiResponse;
         }
 
@@ -61,5 +64,5 @@ namespace CCMarketoBL
             return identity;
         }
     }
-  
+
 }

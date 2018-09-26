@@ -56,15 +56,9 @@
     <Compile Include="Asset\Programs\GetPrograms.cs" />
     <Compile Include="Asset\Utilites.cs" />
     <Compile Include="Authentication\IdentityManager.cs" />
+    <Compile Include="CCMTManager\CCMTHelper.cs" />
     <Compile Include="CCMTManager\ServiceManager.cs" />
     <Compile Include="CCMTManager\TokenManager.cs" />
-    <Compile Include="LeadDatabase\Leads\PushLeads.cs" />
-    <Compile Include="LeadDatabase\StaticLists\AddToList.cs" />
-    <Compile Include="LeadDatabase\StaticLists\GetLeadsByListID.cs" />
-    <Compile Include="LeadDatabase\StaticLists\GetListById.cs" />
-    <Compile Include="LeadDatabase\StaticLists\GetLists.cs" />
-    <Compile Include="LeadDatabase\StaticLists\MemberOfList.cs" />
-    <Compile Include="LeadDatabase\StaticLists\RemoveFromList.cs" />
     <Compile Include="Model\FolderParameter.cs" />
     <Compile Include="Model\IdentityModel.cs" />
     <Compile Include="Model\ProgramModel.cs" />
@@ -72,7 +66,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

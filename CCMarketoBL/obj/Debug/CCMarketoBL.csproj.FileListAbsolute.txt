@@ -8,3 +8,6 @@ D:\CloudCherry\API\CCMT\CCMarketoBL\obj\Debug\MaketoCanvasBL.pdb
 D:\CloudCherry\API\CCMT\CCMarketoBL\bin\Debug\MaketoCanvasBL.dll.config
 D:\CloudCherry\API\CCMT\CCMarketoBL\bin\Debug\RestSharp.xml
 D:\CloudCherry\API\CCMT\CCMarketoBL\obj\Debug\CCMarketoBL.csprojResolveAssemblyReference.cache
+D:\CloudCherry\CCMT\CCMarketoBL\obj\Debug\CCMarketoBL.csprojResolveAssemblyReference.cache
+D:\CloudCherry\CCMT\CCMarketoBL\obj\Debug\MaketoCanvasBL.dll
+D:\CloudCherry\CCMT\CCMarketoBL\obj\Debug\MaketoCanvasBL.pdb

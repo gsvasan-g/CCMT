@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net;
+using System.Net.Http;
 using System.IO;
 using System.Collections;
 using Newtonsoft.Json;
@@ -26,8 +27,12 @@ namespace CCMarketoBL
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "POST";
             request.ContentType = "application/x-www-form-urlencoded";
-            StreamReader reader =ServiceManager.POST_APICall(url, requestBody,request);
+            StreamReader reader = ServiceManager.POST_APICall(url, requestBody, request);
             return reader.ReadToEnd();
+
+            //HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, new Uri(url));
+            //var result = ServiceManager.Make_APICall(request).GetAwaiter().GetResult();
+            //return result;
         }
         
         private String bodyBuilder(FolderParameter folderParam)
