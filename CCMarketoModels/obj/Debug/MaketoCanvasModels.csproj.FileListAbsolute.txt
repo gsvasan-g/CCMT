@@ -1,0 +1,9 @@
+C:\Users\al1995\Source\Repos\MyFirstProject\MarketoCanvas\MaketoCanvasModels\bin\Debug\MaketoCanvasModels.dll
+C:\Users\al1995\Source\Repos\MyFirstProject\MarketoCanvas\MaketoCanvasModels\bin\Debug\MaketoCanvasModels.pdb
+C:\Users\al1995\Source\Repos\MyFirstProject\MarketoCanvas\MaketoCanvasModels\bin\Debug\Newtonsoft.Json.dll
+C:\Users\al1995\Source\Repos\MyFirstProject\MarketoCanvas\MaketoCanvasModels\bin\Debug\Newtonsoft.Json.xml
+C:\Users\al1995\Source\Repos\MyFirstProject\MarketoCanvas\MaketoCanvasModels\obj\Debug\MaketoCanvasModels.csprojAssemblyReference.cache
+C:\Users\al1995\Source\Repos\MyFirstProject\MarketoCanvas\MaketoCanvasModels\obj\Debug\MaketoCanvasModels.csproj.CoreCompileInputs.cache
+C:\Users\al1995\Source\Repos\MyFirstProject\MarketoCanvas\MaketoCanvasModels\obj\Debug\MaketoCanvasModels.csproj.CopyComplete
+C:\Users\al1995\Source\Repos\MyFirstProject\MarketoCanvas\MaketoCanvasModels\obj\Debug\MaketoCanvasModels.dll
+C:\Users\al1995\Source\Repos\MyFirstProject\MarketoCanvas\MaketoCanvasModels\obj\Debug\MaketoCanvasModels.pdb
