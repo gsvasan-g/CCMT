@@ -13,12 +13,12 @@ namespace CCMarketoBL.CCMTManager
     {
         public static string GetFullUrl(string resourceUrl)
         {
-            IdentityManager tokenManager = new IdentityManager();
-            IdentityModel identity = new IdentityModel();
-            identity.ClientID = "1e4603f3-ee9e-476c-a3f9-59c5b9c4837b";
-            identity.ClientSecret = "Udmc9mUFHe1J3qUsw59qdzC58H2a6Lnh";
-            var token = tokenManager.getToken(identity)["access_token"];
-            String url = ConfigurationManager.AppSettings["MTBaseURL"] + resourceUrl + "?access_token=" + token;
+            //IdentityManager tokenManager = new IdentityManager();
+            //IdentityModel identity = new IdentityModel();
+            //identity.ClientID = ConfigurationManager.AppSettings["ClientId"];
+            //identity.ClientSecret = ConfigurationManager.AppSettings["ClientSecret"];
+            //var token = tokenManager.authenticate(identity)["access_token"];
+            String url = ConfigurationManager.AppSettings["MTBaseURL"] + resourceUrl;
             return url;
         }
     }

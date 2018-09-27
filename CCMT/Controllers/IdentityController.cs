@@ -13,7 +13,7 @@ namespace CCMT.Controllers
     public class IdentityController : ApiController
     {
         [HttpPost]
-        [Route("SaveCredentials")]
+        [Route("authenticate")]
         public IHttpActionResult CCMTSaveCredentials(IdentityModel identityModel)
         {  
             try

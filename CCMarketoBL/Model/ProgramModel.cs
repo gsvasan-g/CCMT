@@ -13,4 +13,20 @@ namespace CCMarketoBL.Model
         public int ProgramCost { get; set; }
 
     }
+    public class ProgramParam
+    {
+        public string name { get; set; }
+        public ParentFolderParam folder { get; set; }
+        public string description { get; set; }
+        public string type { get; set; }
+        public string channel { get; set; }
+        public CostParam[] costs { get; set; }
+
+    }
+   public class CostParam
+    {
+        public string startDate { get; set; }
+        public int cost { get; set; }
+
+    }
 }

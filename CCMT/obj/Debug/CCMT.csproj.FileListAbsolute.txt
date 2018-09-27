@@ -51,14 +51,12 @@ D:\CloudCherry\CCMT\CCMT\bin\Newtonsoft.Json.dll
 D:\CloudCherry\CCMT\CCMT\bin\System.Net.Http.Formatting.dll
 D:\CloudCherry\CCMT\CCMT\bin\System.Web.Http.dll
 D:\CloudCherry\CCMT\CCMT\bin\System.Web.Http.WebHost.dll
-D:\CloudCherry\CCMT\CCMT\bin\RestSharp.dll
 D:\CloudCherry\CCMT\CCMT\bin\MaketoCanvasBL.pdb
 D:\CloudCherry\CCMT\CCMT\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 D:\CloudCherry\CCMT\CCMT\bin\Newtonsoft.Json.xml
 D:\CloudCherry\CCMT\CCMT\bin\System.Net.Http.Formatting.xml
 D:\CloudCherry\CCMT\CCMT\bin\System.Web.Http.xml
 D:\CloudCherry\CCMT\CCMT\bin\System.Web.Http.WebHost.xml
-D:\CloudCherry\CCMT\CCMT\bin\RestSharp.xml
 D:\CloudCherry\CCMT\CCMT\obj\Debug\CCMT.csprojResolveAssemblyReference.cache
 D:\CloudCherry\CCMT\CCMT\obj\Debug\CCMT.dll
 D:\CloudCherry\CCMT\CCMT\obj\Debug\CCMT.pdb

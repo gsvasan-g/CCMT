@@ -13,7 +13,7 @@ namespace CCMarketoBL
 {
     public class ServiceManager
     {
-        public static async Task<string> Make_APICall(HttpRequestMessage request)
+        public static async Task<string> Make_APICallAync(HttpRequestMessage request)
         {
             try
             {
@@ -51,25 +51,48 @@ namespace CCMarketoBL
                 return null;
             }
         }
-   
 
+       
         public static StreamReader POST_APICall(string url, string requestBody, HttpWebRequest request)
         {
-
-            StreamWriter wr = new StreamWriter(request.GetRequestStream());
-            wr.Write(requestBody);
-            wr.Flush();
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            Stream resStream = response.GetResponseStream();
-            StreamReader reader = new StreamReader(resStream);
-            return reader;
+            try
+            {
+                StreamWriter wr = new StreamWriter(request.GetRequestStream());
+                wr.Write(requestBody);
+                wr.Flush();
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                Stream resStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(resStream);
+                return reader;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        public static string POST_APICall_2(string url, HttpContent content)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+               // HttpContent contentPost = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
+                
+                var response = client.PostAsync(url, content).Result;
+                return response.Content.ReadAsStringAsync().Result;
+            }
         }
         public static StreamReader GET_APICall(string url, HttpWebRequest request)
         {
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            Stream resStream = response.GetResponseStream();
-            StreamReader reader = new StreamReader(resStream);
-            return reader;
+            try
+            {
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                Stream resStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(resStream);
+                return reader;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 

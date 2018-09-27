@@ -10,21 +10,19 @@ using Newtonsoft.Json;
 
 namespace CCMT.Controllers
 {
-    
+ 
+    [RoutePrefix("CCMT/v1/Fields")]
     public class MapperController : ApiController
     {
         [HttpGet]
-        [Route("CCFields")]
+        [Route("CC")]
         public IHttpActionResult GetCCFieldsForMapping()
         {
-            ServiceManager serv = new ServiceManager();
+            CCMTMapper mapper = new CCMTMapper();
             List<string> MTFieldList = new List<string>();
             try
-            {
-
-                var ServResponse = serv.CC_GetServResponse("cccc");
-                                   
-
+            {               
+              var ServResponse= mapper.getCCFields();
                 var apiObject = JsonConvert.DeserializeObject<dynamic>(ServResponse);
                 var fieldresult = JsonConvert.DeserializeObject<dynamic>(apiObject.result.ToString());
 
@@ -43,17 +41,15 @@ namespace CCMT.Controllers
            
         }
         [HttpGet]
-        [Route("MTFields")]
+        [Route("MT")]
         public IHttpActionResult GetMTFieldsForMapping()
         {
             ServiceManager serv = new ServiceManager();
             List<string> MTFieldList = new List<string>();
+            CCMTMapper mapper = new CCMTMapper();
             try
             {
-
-                var ServResponse = serv.MT_GetServResponse("/rest/v1/leads/describe.json?access_token=eae4d363-69c9-4694-b98c-c9d553dd01df:sj");
-                                    
-
+                var ServResponse = mapper.getMarketoFields("");
                 var apiObject = JsonConvert.DeserializeObject<dynamic>(ServResponse);
                 var fieldresult = JsonConvert.DeserializeObject<dynamic>(apiObject.result.ToString());
 

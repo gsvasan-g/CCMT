@@ -50,15 +50,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Asset\Folders\CreateFolder.cs" />
-    <Compile Include="Asset\Folders\GetFolders.cs" />
-    <Compile Include="Asset\Programs\CreatePrograms.cs" />
-    <Compile Include="Asset\Programs\GetPrograms.cs" />
+    <Compile Include="Asset\Folders\CCMTFolder.cs" />
+    <Compile Include="Asset\Mapper\CCMTMapper.cs" />
+    <Compile Include="Asset\Programs\CCMTProgram.cs" />
     <Compile Include="Asset\Utilites.cs" />
     <Compile Include="Authentication\IdentityManager.cs" />
     <Compile Include="CCMTManager\CCMTHelper.cs" />
     <Compile Include="CCMTManager\ServiceManager.cs" />
-    <Compile Include="CCMTManager\TokenManager.cs" />
     <Compile Include="Model\FolderParameter.cs" />
     <Compile Include="Model\IdentityModel.cs" />
     <Compile Include="Model\ProgramModel.cs" />

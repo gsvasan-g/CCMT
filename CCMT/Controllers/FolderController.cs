@@ -3,6 +3,7 @@ using CCMarketoBL;
 using CCMarketoBL.Model;
 
 using Newtonsoft.Json;
+using System;
 
 namespace MarketoCanvasAPI.Controllers
 {
@@ -13,18 +14,32 @@ namespace MarketoCanvasAPI.Controllers
         [HttpGet,Route("list/{enterpriseID}")]
         public IHttpActionResult getMTFolder(string enterpriseID)
         {
-            BrowseFolders browseFldr = new BrowseFolders();
-          var result =  browseFldr.getData(enterpriseID);
-            return Ok(JsonConvert.DeserializeObject<dynamic>(result));
+            try
+            {
+                CCMTFolder browseFldr = new CCMTFolder();
+                var result = browseFldr.getFolderList(enterpriseID);
+                return Ok(JsonConvert.DeserializeObject<dynamic>(result));
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError();
+            }
         }
 
         [HttpPost, Route("create")]
-        public IHttpActionResult createMTFolder(FolderParameter folderParam)
+        public IHttpActionResult createMTFolder(FolderParam folderParam)
         {
-            CreateFolder folder = new CreateFolder();
-            var result=folder.createNewFolder(folderParam);
-            return Ok(JsonConvert.DeserializeObject<dynamic>(result));
-          //  return Ok(new { Message = "Folder created successfully" });
+            try
+            {
+                CCMTFolder folder = new CCMTFolder();
+                var result = folder.createNewFolder(folderParam);
+                return Ok(JsonConvert.DeserializeObject<dynamic>(result));
+                //  return Ok(new { Message = "Folder created successfully" });
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError();
+            }
         }
 
        

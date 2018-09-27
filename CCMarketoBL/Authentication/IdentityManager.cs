@@ -7,47 +7,85 @@ using System.Net;
 using CCMarketoBL.Model;
 using System.Threading.Tasks;
 using CCMarketoBL.CCMTManager;
+using System.Text;
+using System.Web;
 
 namespace CCMarketoBL
 {
     public class IdentityManager
     {
 
-        private String host = ConfigurationManager.AppSettings["MTBaseURL"].ToString();// Utilities.Host;
-        private String clientId = ConfigurationManager.AppSettings["ClientId"].ToString();//Utilities.ClientId;
-        private String clientSecret = ConfigurationManager.AppSettings["ClientSecret"].ToString();//Utilities.ClientSecret;
+        public Dictionary<string, string> Authenticate_Marketo(IdentityModel identityModel)
+        {
+            try
+            {
+                //getCredentialsByEnterpriseID- to get clientid,client_secret
+                identityModel = new IdentityModel();
+                identityModel.ClientID = ConfigurationManager.AppSettings["ClientId"];
+                identityModel.ClientSecret = ConfigurationManager.AppSettings["ClientSecret"];
 
-        public Dictionary<string, string> getToken(IdentityModel identityModel)
+                var resourceUrl = "/identity/oauth/token?grant_type=client_credentials&client_id=" + identityModel.ClientID + "&client_secret=" + identityModel.ClientSecret;
+                string url = CCMTHelper.GetFullUrl(resourceUrl);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+
+                StreamReader reader = ServiceManager.GET_APICall(url, request);
+                String json = reader.ReadToEnd();
+                //  ServiceManager serv = new ServiceManager();
+                //var json=  serv.MT_GetServResponse(url);
+                Dictionary<String, String> dict = JsonConvert.DeserializeObject<Dictionary<String, String>>(json);
+                return dict;
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
+        }
+        public Dictionary<string, string> Authenticate_CC(CCIdentityParam ccIdentityParam)
         {
             //getCredentialsByEnterpriseID- to get clientid,client_secret
-            identityModel = new IdentityModel();
-            identityModel.ClientID = clientId;
-            identityModel.ClientSecret = clientSecret;
 
-            var resourceUrl = "/identity/oauth/token?grant_type=client_credentials&client_id=" + identityModel.ClientID + "&client_secret=" + identityModel.ClientSecret;
-            string url = CCMTHelper.GetFullUrl(resourceUrl);
+            try
+            {
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.ContentType = "application/json";
 
-            StreamReader reader = ServiceManager.GET_APICall(url, request);
+                var resourceUrl = ConfigurationManager.AppSettings["CCBaseAPIURL"] + "/api/LoginToken";
 
-            String json = reader.ReadToEnd();
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(resourceUrl);
+                request.ContentType = "application/x-www-form-urlencoded";
+                var sb = new StringBuilder();
+                sb.Append("grant_type:" + ccIdentityParam.grant_type);
+                sb.Append("&username:" + ccIdentityParam.username);
+                sb.Append("&password:" + ccIdentityParam.password);
+                request.Method = "POST";
+                StreamReader reader = ServiceManager.POST_APICall(resourceUrl, sb.ToString(), request);
+                String json = reader.ReadToEnd();
+                //  HttpContent contentPost = new StringContent(JsonConvert.SerializeObject(ccIdentityParam), Encoding.UTF8, "application/x-www-form-urlencoded");
+                // String json = ServiceManager.POST_APICall_2(resourceUrl, contentPost);
 
-            //  ServiceManager serv = new ServiceManager();
-            //var json=  serv.MT_GetServResponse(url);
-            Dictionary<String, String> dict = JsonConvert.DeserializeObject<Dictionary<String, String>>(json);
-            return dict;
+                Dictionary<String, String> dict = JsonConvert.DeserializeObject<Dictionary<String, String>>(json);
+                return dict;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
         public Dictionary<String, String> createIdentity(IdentityModel identityModel)
         {
-            var apiResponse = getToken(identityModel);
-            if (apiResponse.ContainsKey("access_token"))
+            try
             {
-                Task.Run(() => saveCredentials(identityModel));
-            }
+                var identityResponse = Authenticate_Marketo(identityModel);
+                if (identityResponse.ContainsKey("access_token"))
+                {
+                    Task.Run(() => saveCredentials(identityModel));
+                }
 
-            return apiResponse;
+                return identityResponse;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         public bool saveCredentials(IdentityModel identityModel)

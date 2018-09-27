@@ -4,36 +4,44 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using CCMarketoBL;
+using CCMarketoBL.Model;
+using Newtonsoft.Json;
 
 namespace MarketoCanvasAPI.Controllers
 {
+    [RoutePrefix("CCMT/v1/Program")]
     public class ProgramController : ApiController
     {
-        // GET: api/Program
-        public IEnumerable<string> Get()
+        [HttpGet, Route("list/{enterpriseID}")]
+        public IHttpActionResult getMTFolder(string enterpriseID)
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                CCMTProgram prog = new CCMTProgram();
+                var result = prog.getProgramsList(enterpriseID);
+                return Ok(JsonConvert.DeserializeObject<dynamic>(result));
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError();
+            }
         }
 
-        // GET: api/Program/5
-        public string Get(int id)
+        [HttpPost, Route("create")]
+        public IHttpActionResult createMTFolder(ProgramParam progParam)
         {
-            return "value";
-        }
-
-        // POST: api/Program
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT: api/Program/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/Program/5
-        public void Delete(int id)
-        {
+            try
+            {
+                CCMTProgram prog = new CCMTProgram();
+                var result = prog.createNewProgram(progParam);
+                return Ok(JsonConvert.DeserializeObject<dynamic>(result));
+                //  return Ok(new { Message = "Program created successfully" });
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError();
+            }
         }
     }
 }
