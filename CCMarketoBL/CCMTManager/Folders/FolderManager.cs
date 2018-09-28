@@ -17,7 +17,8 @@ using System.Web;
 namespace CCMarketoBL
 {
 
-    public class CCMTFolder
+    public class FolderManager
+
     {
         public String getFolderList(string enterpriseID)
         {

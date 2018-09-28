@@ -16,7 +16,7 @@ namespace MarketoCanvasAPI.Controllers
         {
             try
             {
-                CCMTFolder browseFldr = new CCMTFolder();
+                FolderManager browseFldr = new FolderManager();
                 var result = browseFldr.getFolderList(enterpriseID);
                 return Ok(JsonConvert.DeserializeObject<dynamic>(result));
             }
@@ -31,7 +31,7 @@ namespace MarketoCanvasAPI.Controllers
         {
             try
             {
-                CCMTFolder folder = new CCMTFolder();
+                FolderManager folder = new FolderManager();
                 var result = folder.createNewFolder(folderParam);
                 return Ok(JsonConvert.DeserializeObject<dynamic>(result));
                 //  return Ok(new { Message = "Folder created successfully" });

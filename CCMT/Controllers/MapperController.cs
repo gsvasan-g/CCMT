@@ -18,25 +18,31 @@ namespace CCMT.Controllers
         [Route("CC")]
         public IHttpActionResult GetCCFieldsForMapping()
         {
-            CCMTMapper mapper = new CCMTMapper();
-            List<string> MTFieldList = new List<string>();
+            MapperManager mapper = new MapperManager();
+            Dictionary<string, string> CCFieldList = new Dictionary<string, string>();
             try
             {               
               var ServResponse= mapper.getCCFields();
-                var apiObject = JsonConvert.DeserializeObject<dynamic>(ServResponse);
-                var fieldresult = JsonConvert.DeserializeObject<dynamic>(apiObject.result.ToString());
-
-                foreach (var tmp in fieldresult)
+                if (ServResponse != null)
                 {
-                    var obj = JsonConvert.DeserializeObject<dynamic>(tmp.rest.ToString());
-                    MTFieldList.Add(obj.name);
+                    var apiObject = JsonConvert.DeserializeObject<dynamic>(ServResponse);
+                    
+                   
+                    foreach (var tmp in apiObject)
+                    {
+                        if (!CCFieldList.ContainsKey(tmp.id.ToString()))
+                        {
+                            CCFieldList.Add(tmp.id.ToString(), tmp.text.ToString());
+                        }
+                    }
+                    return Ok(new { CCFields = CCFieldList });
                 }
-                return Ok(JsonConvert.SerializeObject(MTFieldList));
+                return BadRequest();
             }
             catch (Exception ex)
             {                
 
-                return BadRequest();
+                return InternalServerError();
             }
            
         }
@@ -46,7 +52,7 @@ namespace CCMT.Controllers
         {
             ServiceManager serv = new ServiceManager();
             List<string> MTFieldList = new List<string>();
-            CCMTMapper mapper = new CCMTMapper();
+            MapperManager mapper = new MapperManager();
             try
             {
                 var ServResponse = mapper.getMarketoFields("");

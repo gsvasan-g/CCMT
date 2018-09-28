@@ -16,7 +16,8 @@ using CCMarketoBL.CCMTManager;
 namespace CCMarketoBL
 {
 
-    public class CCMTProgram
+    public class ProgramManager
+
     {
 
         public String getProgramsList(string enterpriseID)

@@ -51,13 +51,12 @@ namespace CCMarketoBL
                 var resourceUrl = ConfigurationManager.AppSettings["CCBaseAPIURL"] + "/api/LoginToken";
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(resourceUrl);
-                request.ContentType = "application/x-www-form-urlencoded";
-                var sb = new StringBuilder();
-                sb.Append("grant_type:" + ccIdentityParam.grant_type);
-                sb.Append("&username:" + ccIdentityParam.username);
-                sb.Append("&password:" + ccIdentityParam.password);
                 request.Method = "POST";
-                StreamReader reader = ServiceManager.POST_APICall(resourceUrl, sb.ToString(), request);
+                request.ContentType = "application/x-www-form-urlencoded";
+
+                String body = bodyBuilder(ccIdentityParam);
+            
+                StreamReader reader = ServiceManager.POST_APICall(resourceUrl, body, request);
                 String json = reader.ReadToEnd();
                 //  HttpContent contentPost = new StringContent(JsonConvert.SerializeObject(ccIdentityParam), Encoding.UTF8, "application/x-www-form-urlencoded");
                 // String json = ServiceManager.POST_APICall_2(resourceUrl, contentPost);
@@ -100,6 +99,22 @@ namespace CCMarketoBL
             // get  data from DB based on provided ID
             IdentityModel identity = new IdentityModel();
             return identity;
+        }
+        private String bodyBuilder(CCIdentityParam ccIdentityParam)
+        {
+            try
+            {
+                var sb = new StringBuilder();
+               
+                sb.Append("grant_type=" + ccIdentityParam.grant_type);
+                sb.Append("&username=" + ccIdentityParam.username);
+                sb.Append("&password=" + ccIdentityParam.password);
+                return sb.ToString();
+                }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 

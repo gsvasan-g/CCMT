@@ -17,7 +17,7 @@ using System.Web;
 namespace CCMarketoBL
 {
 
-    public class CCMTMapper
+    public class MapperManager
     {
         public String getCCFields()
         {
@@ -35,12 +35,13 @@ namespace CCMarketoBL
                 if (identityResponse.ContainsKey("access_token"))
                 {
                     qs.Add("access_token", identityResponse["access_token"]);
-
-                    var resourceUrl = ConfigurationManager.AppSettings["CCBaseAPIURL"] + "/api/Questions/Active" + qs.ToString();
-                    string url = CCMTHelper.GetFullUrl(resourceUrl);
-
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                    StreamReader reader = ServiceManager.GET_APICall(url, request);
+                    var resourceUrl = ConfigurationManager.AppSettings["CCBaseAPIURL"] + "/api/Questions/Active";// + qs.ToString();
+            
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(resourceUrl);
+                    request.PreAuthenticate = true;
+                    request.Headers.Add("Authorization", "Bearer " + identityResponse["access_token"]);
+                    
+                    StreamReader reader = ServiceManager.GET_APICall(resourceUrl, request);
                     return reader.ReadToEnd();
                 }
                 return string.Empty;

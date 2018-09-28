@@ -50,10 +50,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Asset\Folders\CCMTFolder.cs" />
-    <Compile Include="Asset\Mapper\CCMTMapper.cs" />
-    <Compile Include="Asset\Programs\CCMTProgram.cs" />
-    <Compile Include="Asset\Utilites.cs" />
+    <Compile Include="CCMTManager\Folders\FolderManager.cs" />
+    <Compile Include="CCMTManager\Mapper\MapperManager.cs" />
+    <Compile Include="CCMTManager\Programs\ProgramManager.cs" />
+    <Compile Include="CCMTManager\Utilites.cs" />
     <Compile Include="Authentication\IdentityManager.cs" />
     <Compile Include="CCMTManager\CCMTHelper.cs" />
     <Compile Include="CCMTManager\ServiceManager.cs" />
@@ -66,6 +66,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

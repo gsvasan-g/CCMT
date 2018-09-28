@@ -18,7 +18,7 @@ namespace MarketoCanvasAPI.Controllers
         {
             try
             {
-                CCMTProgram prog = new CCMTProgram();
+                ProgramManager prog = new ProgramManager();
                 var result = prog.getProgramsList(enterpriseID);
                 return Ok(JsonConvert.DeserializeObject<dynamic>(result));
             }
@@ -33,7 +33,7 @@ namespace MarketoCanvasAPI.Controllers
         {
             try
             {
-                CCMTProgram prog = new CCMTProgram();
+                ProgramManager prog = new ProgramManager();
                 var result = prog.createNewProgram(progParam);
                 return Ok(JsonConvert.DeserializeObject<dynamic>(result));
                 //  return Ok(new { Message = "Program created successfully" });
