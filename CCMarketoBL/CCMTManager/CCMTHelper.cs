@@ -4,8 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace CCMarketoBL.CCMTManager
 {
@@ -21,5 +22,6 @@ namespace CCMarketoBL.CCMTManager
             String url = ConfigurationManager.AppSettings["MTBaseURL"] + resourceUrl;
             return url;
         }
+       
     }
 }

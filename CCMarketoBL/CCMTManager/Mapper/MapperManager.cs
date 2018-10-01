@@ -13,38 +13,40 @@ using System.Configuration;
 using CCMarketoBL.Model;
 using CCMarketoBL.CCMTManager;
 using System.Web;
+using System.Net.Http.Headers;
 
 namespace CCMarketoBL
 {
 
     public class MapperManager
     {
-        public String getCCFields()
+        public String getCCFields(string accessToken)
         {
             try
             {
                 // CCIdentityParam identity = new CCIdentityParam();
                 IdentityManager tokenManager = new IdentityManager();
-                CCIdentityParam identity = new CCIdentityParam();
-                identity.grant_type = ConfigurationManager.AppSettings["CCGrantType"];
-                identity.username = ConfigurationManager.AppSettings["CCUserName"];
-                identity.password = ConfigurationManager.AppSettings["CCPassword"];
+                //CCIdentityParam identity = new CCIdentityParam();
+                //identity.grant_type = ConfigurationManager.AppSettings["CCGrantType"];
+                //identity.username = ConfigurationManager.AppSettings["CCUserName"];
+                //identity.password = ConfigurationManager.AppSettings["CCPassword"];
 
-                var qs = HttpUtility.ParseQueryString(string.Empty);
-                var identityResponse = tokenManager.Authenticate_CC(identity);
-                if (identityResponse.ContainsKey("access_token"))
-                {
-                    qs.Add("access_token", identityResponse["access_token"]);
-                    var resourceUrl = ConfigurationManager.AppSettings["CCBaseAPIURL"] + "/api/Questions/Active";// + qs.ToString();
+               // var qs = HttpUtility.ParseQueryString(string.Empty);
+                
+              //  var identityResponse = tokenManager.Authenticate_CC(identity);
+                //if (identityResponse.ContainsKey("access_token"))
+                //{
+                //    qs.Add("access_token", identityResponse["access_token"]);
+                   var resourceUrl = ConfigurationManager.AppSettings["CCBaseAPIURL"] + "/api/Questions/Active";// + qs.ToString();
             
                     HttpWebRequest request = (HttpWebRequest)WebRequest.Create(resourceUrl);
                     request.PreAuthenticate = true;
-                    request.Headers.Add("Authorization", "Bearer " + identityResponse["access_token"]);
+                    request.Headers.Add("Authorization", "Bearer " + accessToken);
                     
                     StreamReader reader = ServiceManager.GET_APICall(resourceUrl, request);
                     return reader.ReadToEnd();
-                }
-                return string.Empty;
+               // }
+                //return string.Empty;
                 // var servResponse= serv.MT_GetServResponse(url);
                 // return servResponse;
             }

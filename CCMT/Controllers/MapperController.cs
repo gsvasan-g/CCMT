@@ -16,13 +16,24 @@ namespace CCMT.Controllers
     {
         [HttpGet]
         [Route("CC")]
+        [CCAuthenticate]
         public IHttpActionResult GetCCFieldsForMapping()
         {
             MapperManager mapper = new MapperManager();
             Dictionary<string, string> CCFieldList = new Dictionary<string, string>();
             try
-            {               
-              var ServResponse= mapper.getCCFields();
+            {
+                string accessToken = "";
+                var coo = Request.Headers.GetCookies("cc_access_token");
+                if (coo.Count > 0)
+                {
+                    var cookie = coo[0].Cookies[0];
+                    if (cookie != null)
+                    {
+                        accessToken = cookie.Value;
+                    }
+                }
+                var ServResponse= mapper.getCCFields(accessToken);
                 if (ServResponse != null)
                 {
                     var apiObject = JsonConvert.DeserializeObject<dynamic>(ServResponse);

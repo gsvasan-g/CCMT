@@ -46,8 +46,7 @@ namespace CCMarketoBL
 
             try
             {
-
-
+               
                 var resourceUrl = ConfigurationManager.AppSettings["CCBaseAPIURL"] + "/api/LoginToken";
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(resourceUrl);

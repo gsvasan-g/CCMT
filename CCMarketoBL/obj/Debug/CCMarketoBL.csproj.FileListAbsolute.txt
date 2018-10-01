@@ -17,3 +17,5 @@ D:\CloudCherry\CCMT\CCMarketoBL\bin\Debug\RestSharp.dll
 D:\CloudCherry\CCMT\CCMarketoBL\bin\Debug\Newtonsoft.Json.xml
 D:\CloudCherry\CCMT\CCMarketoBL\bin\Debug\RestSharp.xml
 D:\CloudCherry\CCMT\CCMarketoBL\obj\Debug\CCMarketoBL.csprojResolveAssemblyReference.cache
+D:\CloudCherry\CCMT\CCMarketoBL\bin\Debug\System.Net.Http.Formatting.dll
+D:\CloudCherry\CCMT\CCMarketoBL\bin\Debug\System.Net.Http.Formatting.xml

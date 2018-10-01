@@ -8,7 +8,7 @@ using CCMarketoBL;
 using CCMarketoBL.Model;
 using Newtonsoft.Json;
 
-namespace MarketoCanvasAPI.Controllers
+namespace CCMarketoAPI.Controllers
 {
     [RoutePrefix("CCMT/v1/Program")]
     public class ProgramController : ApiController
