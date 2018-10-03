@@ -57,8 +57,10 @@ namespace CCMT.Controllers
             }
            
         }
+
         [HttpGet]
         [Route("MT")]
+       
         public IHttpActionResult GetMTFieldsForMapping()
         {
             ServiceManager serv = new ServiceManager();
@@ -72,7 +74,7 @@ namespace CCMT.Controllers
                     accessToken = CCMTHelper.GetCacheValue("mt_access_token").ToString();
 
                 }
-                var ServResponse = mapper.getMarketoFields("");
+                var ServResponse = mapper.getMarketoFields(accessToken);
                 var apiObject = JsonConvert.DeserializeObject<dynamic>(ServResponse);
                 var fieldresult = JsonConvert.DeserializeObject<dynamic>(apiObject.result.ToString());
 
@@ -90,6 +92,20 @@ namespace CCMT.Controllers
             }
         }
 
+        [HttpPost, Route("mapCCMT")]
+        public IHttpActionResult createMTFolder()
+        {
+            try
+            {
+                MapperManager mapper = new MapperManager();
+                var result = mapper.mapCCMTEntity("","","","","");
+                return Ok(JsonConvert.DeserializeObject<dynamic>(result));                
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError();
+            }
+        }
 
     }
 }

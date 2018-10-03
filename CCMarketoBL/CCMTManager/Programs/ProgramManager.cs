@@ -50,13 +50,6 @@ namespace CCMarketoBL
         public String createNewProgram(ProgramParam progParam)
         {
 
-            //var postdata = new Dictionary<string, string>();
-            //postdata.Add("name", name);
-            //postdata.Add("folder", "{\"id\":" + FolderId + ",\"type\":\"Folder\"}");
-            //postdata.Add("type", type);
-            //postdata.Add("description", programDescription);
-            //postdata.Add("channel", channel);
-            //postdata.Add("costs", "[{\"startDate\":\"2015-01-01\",\"cost\":2000}]");
             try
             {
                 IdentityModel identity = new IdentityModel();

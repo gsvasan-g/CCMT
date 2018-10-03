@@ -39,6 +39,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -59,6 +60,8 @@
     <Compile Include="Authentication\IdentityManager.cs" />
     <Compile Include="CCMTManager\CCMTHelper.cs" />
     <Compile Include="CCMTManager\ServiceManager.cs" />
+    <Compile Include="Model\CCEntityModel.cs" />
+    <Compile Include="Model\MTEntityModel.cs" />
     <Compile Include="Model\FolderParameter.cs" />
     <Compile Include="Model\IdentityModel.cs" />
     <Compile Include="Model\ProgramModel.cs" />
