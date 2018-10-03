@@ -60,3 +60,7 @@ D:\CloudCherry\CCMT\CCMT\bin\System.Web.Http.WebHost.xml
 D:\CloudCherry\CCMT\CCMT\obj\Debug\CCMT.csprojResolveAssemblyReference.cache
 D:\CloudCherry\CCMT\CCMT\obj\Debug\CCMT.dll
 D:\CloudCherry\CCMT\CCMT\obj\Debug\CCMT.pdb
+D:\CloudCherry\CCMT\CCMT\bin\CCMT.XML
+D:\CloudCherry\CCMT\CCMT\bin\Microsoft.Web.Infrastructure.dll
+D:\CloudCherry\CCMT\CCMT\bin\Swashbuckle.Core.dll
+D:\CloudCherry\CCMT\CCMT\bin\WebActivatorEx.dll

@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using CCMarketoBL;
 using Newtonsoft.Json;
-
+using CCMarketoBL.CCMTManager;
 
 namespace CCMT.Controllers
 {
@@ -24,29 +24,29 @@ namespace CCMT.Controllers
             try
             {
                 string accessToken = "";
-                var coo = Request.Headers.GetCookies("cc_access_token");
-                if (coo.Count > 0)
+            
+                if (CCMTHelper.GetCacheValue("cc_access_token")!=null)
                 {
-                    var cookie = coo[0].Cookies[0];
-                    if (cookie != null)
-                    {
-                        accessToken = cookie.Value;
-                    }
-                }
-                var ServResponse= mapper.getCCFields(accessToken);
-                if (ServResponse != null)
-                {
-                    var apiObject = JsonConvert.DeserializeObject<dynamic>(ServResponse);
-                    
+                        accessToken = CCMTHelper.GetCacheValue("cc_access_token").ToString();
                    
-                    foreach (var tmp in apiObject)
+                }
+                if (!string.IsNullOrEmpty(accessToken))
+                {
+                    var ServResponse = mapper.getCCFields(accessToken);
+                    if (ServResponse != null)
                     {
-                        if (!CCFieldList.ContainsKey(tmp.id.ToString()))
+                        var apiObject = JsonConvert.DeserializeObject<dynamic>(ServResponse);
+
+
+                        foreach (var tmp in apiObject)
                         {
-                            CCFieldList.Add(tmp.id.ToString(), tmp.text.ToString());
+                            if (!CCFieldList.ContainsKey(tmp.id.ToString()))
+                            {
+                                CCFieldList.Add(tmp.id.ToString(), tmp.text.ToString());
+                            }
                         }
+                        return Ok(new { CCFields = CCFieldList });
                     }
-                    return Ok(new { CCFields = CCFieldList });
                 }
                 return BadRequest();
             }
@@ -66,6 +66,12 @@ namespace CCMT.Controllers
             MapperManager mapper = new MapperManager();
             try
             {
+                string accessToken = "";
+                if (CCMTHelper.GetCacheValue("mt_access_token") != null)
+                {
+                    accessToken = CCMTHelper.GetCacheValue("mt_access_token").ToString();
+
+                }
                 var ServResponse = mapper.getMarketoFields("");
                 var apiObject = JsonConvert.DeserializeObject<dynamic>(ServResponse);
                 var fieldresult = JsonConvert.DeserializeObject<dynamic>(apiObject.result.ToString());
