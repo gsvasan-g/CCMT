@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CCMarketoBL.CCMTManager;
+using Newtonsoft.Json;
 using System;
 using System.Configuration;
 using System.IO;
@@ -37,6 +38,7 @@ namespace CCMarketoBL
             }
             catch (Exception ex)
             {
+                CCMTHelper.logError(ex);
                 return null;
             }
         }
@@ -45,12 +47,12 @@ namespace CCMarketoBL
         {
             try
             {
-                //ServicePointManager.Expect100Continue = true;
-                //ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
-                //ServicePointManager.ServerCertificateValidationCallback = delegate (object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
-                //{
-                //    return true;
-                //};
+                ServicePointManager.Expect100Continue = true;
+                ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
+                ServicePointManager.ServerCertificateValidationCallback = delegate (object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+                {
+                    return true;
+                };
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                 Stream resStream = response.GetResponseStream();
                 StreamReader reader = new StreamReader(resStream);
@@ -58,74 +60,12 @@ namespace CCMarketoBL
             }
             catch (Exception ex)
             {
+                CCMTHelper.logError(ex);
                 return null;
             }
         }
 
-        public static string POST_APICall_2(string url, HttpContent content)
-        {
-            try
-            {
-                using (HttpClient client = new HttpClient())
-                {
-                    // HttpContent contentPost = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
-                    ServicePointManager.Expect100Continue = true;
-                    ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
-                    ServicePointManager.ServerCertificateValidationCallback = delegate (object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
-                    {
-                        return true;
-                    };
-
-                    var response = client.PostAsync(url, content).Result;
-                    return response.Content.ReadAsStringAsync().Result;
-                }
-
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-        }
-        public static async Task<string> Make_APICallAync(HttpRequestMessage request)
-        {
-            try
-            {
-                using (HttpClient APIclient = new HttpClient())
-                {
-                    var result = APIclient.SendAsync(request).Result;
-                    result.EnsureSuccessStatusCode();
-                    var responseBody = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-                    return responseBody;
-                }
-            }
-            catch (Exception ex)
-            {
-
-                return null;
-            }
-        }
-        public string MT_GetServResponse(string url)
-        {
-            try
-            {
-                using (HttpClient APIclient = new HttpClient())
-                {
-                    APIclient.BaseAddress = new Uri(ConfigurationManager.AppSettings["MTApiURL"]);
-
-                    HttpResponseMessage servResponse = APIclient.GetAsync(url).Result;
-
-                    return servResponse.Content.ReadAsStringAsync().Result;
-                }
-            }
-            catch (Exception ex)
-            {
-
-                return null;
-            }
-        }
-
-
+       
     }
 
 }

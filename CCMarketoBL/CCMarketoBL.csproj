@@ -57,9 +57,10 @@
     <Compile Include="CCMTManager\Mapper\MapperManager.cs" />
     <Compile Include="CCMTManager\Programs\ProgramManager.cs" />
     <Compile Include="CCMTManager\Utilites.cs" />
-    <Compile Include="Authentication\IdentityManager.cs" />
+    <Compile Include="CCMTManager\Authentication\IdentityManager.cs" />
     <Compile Include="CCMTManager\CCMTHelper.cs" />
     <Compile Include="CCMTManager\ServiceManager.cs" />
+    <Compile Include="Model\CCMappingModel.cs" />
     <Compile Include="Model\CCEntityModel.cs" />
     <Compile Include="Model\MTEntityModel.cs" />
     <Compile Include="Model\FolderParameter.cs" />

@@ -9,6 +9,8 @@ using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http.Results;
+using CCMarketoBL.CCMTManager;
+using System.Configuration;
 
 namespace CCMT.Controllers
 {
@@ -16,17 +18,14 @@ namespace CCMT.Controllers
     public class IdentityController : ApiController
     {
         [HttpPost]
-        [Route("authenticate")]   
-        [MTAuthenticate]     
-        public IHttpActionResult CCMTSaveCredentials(IdentityModel identityModel)
+        [Route("MT/authenticate")]  
+         
+        public IHttpActionResult MTAuthenticate(IdentityModel identityModel)
         {  
             try
             {
-                HttpResponseMessage cookieResponse = new HttpResponseMessage();
-                var myCookie = getCookie("access_token");
-                if (string.IsNullOrEmpty(myCookie))
-                {
-                    IdentityManager identity = new IdentityManager();
+               
+                IdentityManager identity = new IdentityManager();
                     // var apiResponse = identity.createIdentity(identityModel);
                     var apiResponse = identity.Authenticate_Marketo(identityModel);
 
@@ -38,56 +37,66 @@ namespace CCMT.Controllers
                         }
                         else
                         {
-                            var res = identity.saveCredentials(identityModel);
-                          cookieResponse=  setCookies("access_token", apiResponse["access_token"]);
-                        }
+                        SaveCCMTCredentials(identityModel);
+                           // var res = identity.saveCredentials(identityModel, CCaccessToken);
 
-                        return Content(HttpStatusCode.OK, new ResponseMessageResult(cookieResponse));
+                    }
+
+                        return Ok(apiResponse);
                     }
                     else
                         return InternalServerError();
-                }
-                return Ok();                
+                            
             }
             catch (Exception ex)
-            {                
-
+            {
+                //log exception 
+                CCMTHelper.logError(ex);
                 return InternalServerError();
             }
            
         }
 
-        public HttpResponseMessage setCookies(string cookieKey,object value)
-        { 
-            var resp = new HttpResponseMessage();
 
-            var cookie = new CookieHeaderValue(cookieKey, value.ToString());
-            cookie.Expires = DateTimeOffset.Now.AddMinutes(1);
-            cookie.Domain = Request.RequestUri.Host;
-            cookie.Path = "/";
-
-            resp.Headers.AddCookies(new CookieHeaderValue[] { cookie });
-            return resp;
-        }
-        public string getCookie(string cookieKey)
+        public object SaveCCMTCredentials(IdentityModel model)
         {
-            string cookieValue = "";
-            var coo = Request.Headers.GetCookies(cookieKey);
-            if (coo.Count > 0)
+            try
             {
-                var cookie = coo[0].Cookies[0];
-                if (cookie != null)
+                string accessToken = "";
+                if (CCMTHelper.GetCacheValue("cc_access_token") == null)
                 {
-                    cookieValue = cookie.Value;
+                    CCIdentityParam identityModel = new CCIdentityParam();
+                    IdentityManager identityManager = new IdentityManager();
+                    identityModel.grant_type = ConfigurationManager.AppSettings["CCGrantType"];
+                    identityModel.username = ConfigurationManager.AppSettings["CCUserName"];
+                    identityModel.password = ConfigurationManager.AppSettings["CCPassword"];
+                    var apiResponse = identityManager.Authenticate_CC(identityModel);
+                    if (apiResponse != null)
+                    {
+                        var expireMinutes = (Int32)Math.Round((Convert.ToDecimal(apiResponse["expires_in"])) / 60);
+                        CCMTHelper.AddCache("cc_access_token", apiResponse["access_token"].ToString(), DateTimeOffset.Now.AddMinutes(expireMinutes));
+                    }
                 }
+                
+                if (CCMTHelper.GetCacheValue("cc_access_token") != null)
+                {
+                    accessToken = CCMTHelper.GetCacheValue("cc_access_token").ToString();
+
+                }
+                IdentityManager identity = new IdentityManager();                
+                 var res = identity.saveCredentials(model, accessToken);
+                   
+                 return res;
+               
             }
-            //else
-            //{
-            //    IdentityModel identity = new IdentityModel();
-            //     setCookies(identity);
-            //}
-            return cookieValue;
+            catch (Exception ex)
+            {
+                CCMTHelper.logError(ex);
+                return null;
+            }
+
         }
+
         [HttpGet]
         [Route("GetCredentials/{enterpriseID}")]
         public IHttpActionResult CCMTGetCredentials(string enterpriseID)
@@ -95,7 +104,13 @@ namespace CCMT.Controllers
             try
             {
                 IdentityManager identity = new IdentityManager();
-                var apiResponse = identity.getIdentityByID(enterpriseID);
+                string accessToken = "";
+                if (CCMTHelper.GetCacheValue("cc_access_token") != null)
+                {
+                    accessToken = CCMTHelper.GetCacheValue("cc_access_token").ToString();
+
+                }
+                var apiResponse = identity.getIdentityByID(enterpriseID,accessToken);
                 if (apiResponse != null)
                     return Ok(JsonConvert.SerializeObject(apiResponse));
                 else
@@ -103,7 +118,7 @@ namespace CCMT.Controllers
             }
             catch (Exception ex)
             {
-
+                CCMTHelper.logError(ex);
                 return BadRequest();
             }
 

@@ -20,51 +20,30 @@ namespace CCMarketoBL
 
     {
 
-        public String getProgramsList(string enterpriseID)
+        public String getProgramsList(string enterpriseID,string token)
         {
             try
             {
-                var qs = HttpUtility.ParseQueryString(string.Empty);
-                IdentityModel identity = new IdentityModel();
-                IdentityManager tokenManager = new IdentityManager();
-                identity.ClientID = ConfigurationManager.AppSettings["ClientId"];
-                identity.ClientSecret = ConfigurationManager.AppSettings["ClientSecret"];
-
-                var identityResponse = tokenManager.Authenticate_Marketo(identity);
-                if (identityResponse.ContainsKey("access_token"))
-                {
-                    qs.Add("access_token", identityResponse["access_token"]);
-                    var resourceUrl = "/rest/asset/v1/programs.json?" + qs.ToString(); ;
+              
+                    var resourceUrl = "/rest/asset/v1/programs.json?access_token=" + token;
                     string url = CCMTHelper.GetFullUrl(resourceUrl);
                     HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                     StreamReader reader = ServiceManager.GET_APICall(url, request);
                     return reader.ReadToEnd();
-                }
-                return string.Empty;
+               
             }
             catch (Exception ex)
             {
+                CCMTHelper.logError(ex);
                 return null;
             }
         }
-        public String createNewProgram(ProgramParam progParam)
+        public String createNewProgram(string enterpriseID,ProgramParam progParam, string token)
         {
 
             try
             {
-                IdentityModel identity = new IdentityModel();
-                IdentityManager tokenManager = new IdentityManager();
-
-                // var identityResponse= token.getIdentityByID(enterpriseID);
-                identity.ClientID = ConfigurationManager.AppSettings["ClientId"];
-                identity.ClientSecret = ConfigurationManager.AppSettings["ClientSecret"];
-
-                var qs = HttpUtility.ParseQueryString(string.Empty);
-                var identityResponse = tokenManager.Authenticate_Marketo(identity);
-                if (identityResponse.ContainsKey("access_token"))
-                {
-                    qs.Add("access_token", identityResponse["access_token"]);
-                    var resourceUrl = "/rest/asset/v1/programs.json?" + qs.ToString();
+                var resourceUrl = "/rest/asset/v1/programs.json?access_token=" + token;
                     string url = CCMTManager.CCMTHelper.GetFullUrl(resourceUrl);
                     //Form Encode the data
                     String requestBody = bodyBuilder(progParam);
@@ -75,11 +54,11 @@ namespace CCMarketoBL
                     // request.Headers.Add(HttpRequestHeader.Authorization, "");
                     StreamReader reader = ServiceManager.POST_APICall(url, requestBody, request);
                     return reader.ReadToEnd();
-                }
-                return string.Empty;
+               
             }
             catch (Exception ex)
             {
+                CCMTHelper.logError(ex);
                 return null;
             }
 
@@ -108,6 +87,7 @@ namespace CCMarketoBL
             }
             catch (Exception ex)
             {
+                CCMTHelper.logError(ex);
                 return null;
             }
         }

@@ -11,11 +11,6 @@ namespace CCMarketoBL.CCMTManager
     {
         public static string GetFullUrl(string resourceUrl)
         {
-            //IdentityManager tokenManager = new IdentityManager();
-            //IdentityModel identity = new IdentityModel();
-            //identity.ClientID = ConfigurationManager.AppSettings["ClientId"];
-            //identity.ClientSecret = ConfigurationManager.AppSettings["ClientSecret"];
-            //var token = tokenManager.authenticate(identity)["access_token"];
             String url = ConfigurationManager.AppSettings["MTBaseURL"] + resourceUrl;
             return url;
         }
@@ -41,5 +36,9 @@ namespace CCMarketoBL.CCMTManager
             }
         }
 
+        public static void logError(Exception ex)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

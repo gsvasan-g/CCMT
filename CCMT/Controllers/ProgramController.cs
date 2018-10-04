@@ -7,6 +7,8 @@ using System.Web.Http;
 using CCMarketoBL;
 using CCMarketoBL.Model;
 using Newtonsoft.Json;
+using CCMarketoBL.CCMTManager;
+using CCMT;
 
 namespace CCMarketoAPI.Controllers
 {
@@ -14,32 +16,48 @@ namespace CCMarketoAPI.Controllers
     public class ProgramController : ApiController
     {
         [HttpGet, Route("list/{enterpriseID}")]
+        [MTAuthenticate]
         public IHttpActionResult getMTFolder(string enterpriseID)
         {
             try
             {
                 ProgramManager prog = new ProgramManager();
-                var result = prog.getProgramsList(enterpriseID);
+                string accessToken = "";
+                if (CCMTHelper.GetCacheValue("mt_access_token") != null)
+                {
+                    accessToken = CCMTHelper.GetCacheValue("mt_access_token").ToString();
+
+                }
+                var result = prog.getProgramsList(enterpriseID, accessToken);
                 return Ok(JsonConvert.DeserializeObject<dynamic>(result));
             }
             catch (Exception ex)
             {
+                CCMTHelper.logError(ex);
                 return InternalServerError();
             }
         }
 
-        [HttpPost, Route("create")]
-        public IHttpActionResult createMTFolder(ProgramParam progParam)
+        [HttpPost, Route("create/{enterpriseID}")]
+        [MTAuthenticate]
+        public IHttpActionResult createMTFolder(string enterpriseID, ProgramParam progParam)
         {
             try
             {
+                string accessToken = "";
+                if (CCMTHelper.GetCacheValue("mt_access_token") != null)
+                {
+                    accessToken = CCMTHelper.GetCacheValue("mt_access_token").ToString();
+
+                }
                 ProgramManager prog = new ProgramManager();
-                var result = prog.createNewProgram(progParam);
+                var result = prog.createNewProgram(enterpriseID,progParam, accessToken);
                 return Ok(JsonConvert.DeserializeObject<dynamic>(result));
                 //  return Ok(new { Message = "Program created successfully" });
             }
             catch (Exception ex)
             {
+                CCMTHelper.logError(ex);
                 return InternalServerError();
             }
         }

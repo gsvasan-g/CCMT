@@ -37,6 +37,7 @@ namespace CCMarketoBL
             }
             catch (Exception ex)
             {
+                CCMTHelper.logError(ex);
                 return null;
             }
         }
@@ -54,6 +55,7 @@ namespace CCMarketoBL
             }
             catch (Exception ex)
             {
+                CCMTHelper.logError(ex);
                 return null;
             }
         }
@@ -65,22 +67,21 @@ namespace CCMarketoBL
             {
                 var resourceUrl = "/rest/asset/v1/programs.json?access_token=" + accessToken;// + qs.ToString();
                     string url = CCMTManager.CCMTHelper.GetFullUrl(resourceUrl);
-                    //Form Encode the data
+                  
                     String requestBody = bodyBuilder();
                     HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                     request.Method = "POST";
                     request.ContentType = "application/x-www-form-urlencoded";
-
-                    // request.Headers.Add(HttpRequestHeader.Authorization, "");
                     StreamReader reader = ServiceManager.POST_APICall(url, requestBody, request);
                     return reader.ReadToEnd();
                 
             }
             catch (Exception ex)
             {
+                CCMTHelper.logError(ex);
                 return null;
             }
-          
+
         }
 
         private String bodyBuilder()
@@ -97,6 +98,41 @@ namespace CCMarketoBL
             {
                 return null;
             }
+        }
+
+        public object SaveCCMTMapping(CCMTMappingModel mappingModel,string token)
+        {
+            try
+            {
+                CCMTMappingModel ccmtMap = new CCMTMappingModel();             
+                var resourceUrl = ConfigurationManager.AppSettings["CCBaseAPIURL"] + "/api/Questions/ExtraAttributes/Add";
+
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(resourceUrl);
+                request.Method = "POST";
+                request.ContentType = "application/json";
+                request.PreAuthenticate = true;
+                request.Headers.Add("Authorization", "Bearer " + token);
+                var jsonInput = JsonConvert.SerializeObject(mappingModel);
+                StreamReader reader = ServiceManager.POST_APICall(resourceUrl, jsonInput, request);
+                String json = reader.ReadToEnd();
+                return JsonConvert.DeserializeObject(json);
+
+            }
+            catch (Exception ex)
+            {
+                CCMTHelper.logError(ex);
+                return null;
+            }
+        }
+
+        public object UpdateCCMTMapping(CCMTMappingModel mappingModel,string key, string accessToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object getCCMTMappingByKey(string key)
+        {
+            throw new NotImplementedException();
         }
     }
 }

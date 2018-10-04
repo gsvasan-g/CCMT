@@ -52,6 +52,11 @@ namespace CCMT
                 {
                     identityModel = JsonConvert.DeserializeObject<IdentityModel>(reqBody);
                 }
+                else
+                {
+                    actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
+                    return;
+                }
                 var apiResponse = identityManager.Authenticate_Marketo(identityModel);
                 if (apiResponse != null)
                 {

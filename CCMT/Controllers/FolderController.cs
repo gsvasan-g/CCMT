@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using CCMT;
+using CCMarketoBL.CCMTManager;
 
 namespace CCMarketoAPI.Controllers
 {
@@ -20,39 +21,46 @@ namespace CCMarketoAPI.Controllers
             try
             {
                 string accessToken = "";
-                var coo = Request.Headers.GetCookies("mt_access_token");
-                if (coo.Count > 0)
+                if (CCMTHelper.GetCacheValue("mt_access_token") != null)
                 {
-                    var cookie = coo[0].Cookies[0];
-                    if (cookie != null)
-                    {
-                        accessToken = cookie.Value;
-                    }
+                    accessToken = CCMTHelper.GetCacheValue("mt_access_token").ToString();
+
                 }
 
                 FolderManager browseFldr = new FolderManager();
-                var result = browseFldr.getFolderList(accessToken);
+                var result = browseFldr.getFolderList(enterpriseID,accessToken);
                 return Ok(JsonConvert.DeserializeObject<dynamic>(result));
             }
             catch (Exception ex)
             {
+                //log exception 
+                CCMTHelper.logError(ex);
                 return InternalServerError();
             }
         }
 
-        [HttpPost, Route("create")]
-        public IHttpActionResult createMTFolder(FolderParam folderParam)
+        [HttpPost, Route("create/{enterpriseID}")]
+        [MTAuthenticate]
+        public IHttpActionResult createMTFolder(string enterpriseID,FolderParam folderParam)
         {
             try
             {
-            
+                string accessToken = "";
+                if (CCMTHelper.GetCacheValue("mt_access_token") != null)
+                {
+                    accessToken = CCMTHelper.GetCacheValue("mt_access_token").ToString();
+
+                }
+
                 FolderManager folder = new FolderManager();
-                var result = folder.createNewFolder(folderParam);
+                var result = folder.createNewFolder(enterpriseID,folderParam, accessToken);
                 return Ok(JsonConvert.DeserializeObject<dynamic>(result));
                 //  return Ok(new { Message = "Folder created successfully" });
             }
             catch (Exception ex)
             {
+                //log exception 
+                CCMTHelper.logError(ex);
                 return InternalServerError();
             }
         }

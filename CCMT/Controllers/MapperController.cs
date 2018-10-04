@@ -7,15 +7,16 @@ using System.Web.Http;
 using CCMarketoBL;
 using Newtonsoft.Json;
 using CCMarketoBL.CCMTManager;
+using CCMarketoBL.Model;
 
 namespace CCMT.Controllers
 {
  
-    [RoutePrefix("CCMT/v1/Fields")]
+    [RoutePrefix("CCMT/v1/Mapper")]
     public class MapperController : ApiController
     {
         [HttpGet]
-        [Route("CC")]
+        [Route("fields/CC")]
         [CCAuthenticate]
         public IHttpActionResult GetCCFieldsForMapping()
         {
@@ -59,8 +60,8 @@ namespace CCMT.Controllers
         }
 
         [HttpGet]
-        [Route("MT")]
-       
+        [Route("fields/MT")]
+       [MTAuthenticate]
         public IHttpActionResult GetMTFieldsForMapping()
         {
             ServiceManager serv = new ServiceManager();
@@ -92,17 +93,69 @@ namespace CCMT.Controllers
             }
         }
 
-        [HttpPost, Route("mapCCMT")]
-        public IHttpActionResult createMTFolder()
+        [HttpPost, Route("create")]
+        [CCAuthenticate]
+        public IHttpActionResult SaveCCMTMapping(CCMTMappingModel mappingModel)
         {
             try
             {
                 MapperManager mapper = new MapperManager();
-                var result = mapper.mapCCMTEntity("","","","","");
-                return Ok(JsonConvert.DeserializeObject<dynamic>(result));                
+                string accessToken = "";
+                if (CCMTHelper.GetCacheValue("cc_access_token") != null)
+                {
+                    accessToken = CCMTHelper.GetCacheValue("cc_access_token").ToString();
+
+                }
+                var result = mapper.SaveCCMTMapping(mappingModel, accessToken);
+                return Ok(result);                
             }
             catch (Exception ex)
             {
+                CCMTHelper.logError(ex);
+                return InternalServerError();
+            }
+        }
+        [HttpPut, Route("update")]
+        [CCAuthenticate]
+        public IHttpActionResult UpdateCCMTMapping(CCMTMappingModel mappingModel,string key)
+        {
+            try
+            {
+                MapperManager mapper = new MapperManager();
+                string accessToken = "";
+                if (CCMTHelper.GetCacheValue("cc_access_token") != null)
+                {
+                    accessToken = CCMTHelper.GetCacheValue("cc_access_token").ToString();
+
+                }
+                var result = mapper.UpdateCCMTMapping(mappingModel,key, accessToken);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                CCMTHelper.logError(ex);
+                return InternalServerError();
+            }
+        }
+        [HttpGet, Route("get/{key}")]
+        [CCAuthenticate]
+        public IHttpActionResult GetCCMTMapping(string key)
+        {
+            try
+            {
+                MapperManager mapper = new MapperManager();
+                string accessToken = "";
+                if (CCMTHelper.GetCacheValue("cc_access_token") != null)
+                {
+                    accessToken = CCMTHelper.GetCacheValue("cc_access_token").ToString();
+
+                }
+                var result = mapper.getCCMTMappingByKey(key);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                CCMTHelper.logError(ex);
                 return InternalServerError();
             }
         }
